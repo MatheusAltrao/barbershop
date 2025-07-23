@@ -1,4 +1,6 @@
 "use server";
+import { signInAction } from "@/actions/login/signIn.action";
+import { signOutAction } from "@/actions/login/signOut.action";
 import GoogleIcon from "@/assets/icons/google.svg";
 import {
   Sheet,
@@ -8,7 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { auth, signIn, signOut } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { Calendar, DoorOpen, Home, Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -71,12 +73,7 @@ export default async function Header() {
               )}
 
               {!isLoggedIn && (
-                <form
-                  action={async () => {
-                    "use server";
-                    await signIn("google");
-                  }}
-                >
+                <form action={signInAction}>
                   <Button className="gap-2 w-full" variant={"secondary"}>
                     <Image
                       width={24}
@@ -106,12 +103,7 @@ export default async function Header() {
                     ))}
                   </div>
 
-                  <form
-                    action={async () => {
-                      "use server";
-                      await signOut();
-                    }}
-                  >
+                  <form action={signOutAction}>
                     <Button className="w-full " variant={"destructive"}>
                       <DoorOpen /> Sair da conta
                     </Button>
