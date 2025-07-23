@@ -7,14 +7,16 @@ export default function ServiceSection() {
     <div className="px-5 ">
       <TitleSection title="SERVIÇOS" />
 
-      {SERVICES.map((service) => (
-        <ServiceCard
-          key={service.title}
-          title={service.title}
-          description={service.description}
-          price={service.price}
-        />
-      ))}
+      <div className="space-y-2">
+        {SERVICES.map((service) => (
+          <ServiceCard
+            key={service.title}
+            title={service.title}
+            description={service.description}
+            price={service.price}
+          />
+        ))}
+      </div>
     </div>
   );
 }

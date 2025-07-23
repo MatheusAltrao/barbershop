@@ -6,7 +6,7 @@ import { MapPinIcon } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="space-y-3 pb-10">
+    <div className="space-y-3">
       <div className="h-[350px] bg-muted-foreground"></div>
 
       <div className="space-y-6 ">

@@ -69,7 +69,7 @@ export default function ServiceCardSchedule() {
         <Button size={"sm"}>Reservar</Button>
       </SheetTrigger>
       <SheetContent className="h-screen overflow-y-auto pb-10">
-        <SheetHeader className="px-6 pt-6">
+        <SheetHeader>
           <SheetTitle>Fazer Reserva</SheetTitle>
           <SheetDescription>
             Reserve seu horário agora mesmo! Preencha os detalhes abaixo e
@@ -80,7 +80,7 @@ export default function ServiceCardSchedule() {
         <Separator className="my-4" />
 
         <div className="space-y-4 ">
-          <div className="px-6 ">
+          <div>
             <TitleSection title="Selecione a data" />
             <Calendar
               mode="single"
@@ -94,13 +94,16 @@ export default function ServiceCardSchedule() {
 
           <Separator />
 
-          <div className="flex  flex-col px-6">
+          <div className="flex  flex-col ">
             <TitleSection title="Selecione o horário" />
             <div className="space-y-2">
               <div className="flex items-center gap-2  pb-2 overflow-x-auto ">
                 {HOURS.map((hour) => (
                   <button key={hour} onClick={() => setTime(hour)}>
-                    <Badge variant={hour === time ? "default" : "outline"}>
+                    <Badge
+                      className=" px-4 py-2"
+                      variant={hour === time ? "default" : "outline"}
+                    >
                       {hour}
                     </Badge>
                   </button>
@@ -115,7 +118,7 @@ export default function ServiceCardSchedule() {
 
           <Separator />
 
-          <div className="flex  flex-col px-6">
+          <div className="flex  flex-col ">
             <TitleSection title="Serviços selecionados" />
             <div className="flex flex-wrap gap-2  pb-2 text-sm">
               {SERVICES_WITHOUT_DESCRIPTION.map((service, index) => (
@@ -124,7 +127,7 @@ export default function ServiceCardSchedule() {
                   key={index}
                 >
                   <Badge
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2  px-4 py-2"
                     variant={
                       services.find((s) => s.title === service.title)
                         ? "default"
@@ -140,7 +143,7 @@ export default function ServiceCardSchedule() {
 
           <Separator />
 
-          <div className="px-6">
+          <div className="">
             <div className="p-2 rounded-md border">
               <TitleSection title="Resumo" />
 
@@ -184,7 +187,7 @@ export default function ServiceCardSchedule() {
 
           <Separator />
 
-          <div className="px-6">
+          <div className="">
             <Button onClick={handleCreateSchedule} className="w-full ">
               <Calendar1Icon size={20} /> Agendar
             </Button>

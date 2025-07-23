@@ -1,3 +1,4 @@
+import { formatCentsToReais } from "@/utils/formatCentsToReais";
 import ServiceCardSchedule from "./service-card-schedule";
 
 interface ServiceCardProps {
@@ -22,7 +23,9 @@ export default function ServiceCard({
         </div>
 
         <div className="flex items-center justify-between">
-          <span className="font-bold text-primary ">{price}</span>
+          <span className="font-bold text-primary ">
+            {formatCentsToReais(price)}
+          </span>
 
           <ServiceCardSchedule />
         </div>
