@@ -22,60 +22,62 @@ export default function Header() {
   ];
 
   return (
-    <header className="flex items-center justify-between p-4 bg-gray-800 text-white">
-      <h1 className="text-lg font-bold">Barbershop</h1>
+    <header className=" p-5 bg-gray-800 ">
+      <div className="flex items-center justify-between text-white w-full max-w-[1200px] mx-auto">
+        <h1 className="text-lg font-bold">Barbershop</h1>
 
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button className="p-0" size="icon" variant={"ghost"}>
-            <Menu size={28} />
-          </Button>
-        </SheetTrigger>
-        <SheetContent className="p-6 h-screen flex flex-col ">
-          <div className="flex flex-col flex-1">
-            <SheetHeader>
-              <SheetTitle>Menu</SheetTitle>
-              <SheetDescription>
-                Entre com o Google para acessar sua conta
-              </SheetDescription>
-            </SheetHeader>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button className="p-0" size="icon" variant={"ghost"}>
+              <Menu size={28} />
+            </Button>
+          </SheetTrigger>
+          <SheetContent className="p-6 h-screen flex flex-col ">
+            <div className="flex flex-col flex-1">
+              <SheetHeader>
+                <SheetTitle>Menu</SheetTitle>
+                <SheetDescription>
+                  Entre com o Google para acessar sua conta
+                </SheetDescription>
+              </SheetHeader>
 
-            <Separator className="my-4" />
+              <Separator className="my-4" />
 
-            <div className="flex items-center gap-2">
-              <div className="h-12 min-w-12 rounded-full bg-primary"></div>
+              <div className="flex items-center gap-2">
+                <div className="h-12 min-w-12 rounded-full bg-primary"></div>
 
-              <div className="flex flex-col ">
-                <span className="font-bold">Pedro Gonçalves</span>
-                <span className="text-xs text-muted-foreground">
-                  pedrogoncalves@gmail.com
-                </span>
-              </div>
-            </div>
-
-            <Separator className="my-4" />
-
-            <div className="flex flex-col flex-1 justify-between  ">
-              <div className="flex flex-col gap-2">
-                {links.map((link) => (
-                  <Link className="w-full" key={link.href} href={link.href}>
-                    <Button
-                      className="w-full justify-start"
-                      variant={"outline"}
-                    >
-                      {link.icon} {link.label}
-                    </Button>
-                  </Link>
-                ))}
+                <div className="flex flex-col ">
+                  <span className="font-bold">Pedro Gonçalves</span>
+                  <span className="text-xs text-muted-foreground">
+                    pedrogoncalves@gmail.com
+                  </span>
+                </div>
               </div>
 
-              <Button className="w-full " variant={"destructive"}>
-                <DoorOpen /> Sair da conta
-              </Button>
+              <Separator className="my-4" />
+
+              <div className="flex flex-col flex-1 justify-between  ">
+                <div className="flex flex-col gap-2">
+                  {links.map((link) => (
+                    <Link className="w-full" key={link.href} href={link.href}>
+                      <Button
+                        className="w-full justify-start"
+                        variant={"outline"}
+                      >
+                        {link.icon} {link.label}
+                      </Button>
+                    </Link>
+                  ))}
+                </div>
+
+                <Button className="w-full " variant={"destructive"}>
+                  <DoorOpen /> Sair da conta
+                </Button>
+              </div>
             </div>
-          </div>
-        </SheetContent>
-      </Sheet>
+          </SheetContent>
+        </Sheet>
+      </div>
     </header>
   );
 }

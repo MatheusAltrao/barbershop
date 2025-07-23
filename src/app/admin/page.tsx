@@ -12,7 +12,7 @@ import { Menu } from "lucide-react";
 
 export default function AdminPage() {
   return (
-    <div className="p-5 w-full max-w-[1200px] mx-auto">
+    <div className="py-5 w-full max-w-[1200px] mx-auto">
       <Table>
         <TableHeader>
           <TableRow>
