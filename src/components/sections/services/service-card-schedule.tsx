@@ -13,7 +13,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { HOURS } from "@/constants/hours";
-import { SERVICES_WITHOUT_DESCRIPTION } from "@/constants/services";
+import { ServiceProps } from "@/types/service.types";
 import { CURRENT_TIME } from "@/utils/amazones-timezone";
 import { formatCentsToReais } from "@/utils/formatCentsToReais";
 import { ptBR } from "date-fns/locale";
@@ -21,25 +21,24 @@ import { Calendar1Icon, Plus } from "lucide-react";
 import { useState } from "react";
 
 interface ServiceCardScheduleProps {
-  serviceSelected: {
-    title: string;
-    price: number;
-  };
+  services: ServiceProps[];
+  selectedService: ServiceProps;
 }
 
 export default function ServiceCardSchedule({
-  serviceSelected,
+  selectedService,
+  services,
 }: ServiceCardScheduleProps) {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   const [time, setTime] = useState<string | null>(null);
-  const [services, setServices] = useState<{ title: string; price: number }[]>([
-    serviceSelected,
+  const [addedServices, setAddedServices] = useState<ServiceProps[]>([
+    selectedService,
   ]);
 
-  const handleToggleService = (service: { title: string; price: number }) => {
-    setServices((prev) => {
+  const handleToggleService = (service: ServiceProps) => {
+    setAddedServices((prev) => {
       if (prev.find((s) => s.title === service.title)) {
         return prev.filter((s) => s.title !== service.title);
       }
@@ -48,13 +47,13 @@ export default function ServiceCardSchedule({
   };
 
   const handleTotalPrice = () => {
-    return services.reduce((total, service) => {
+    return addedServices.reduce((total, service) => {
       return total + service.price;
     }, 0);
   };
 
   const handleCreateSchedule = () => {
-    if (!date || !time || services.length === 0) {
+    if (!date || !time || addedServices.length === 0) {
       alert("Por favor, preencha todos os campos.");
       return;
     }
@@ -62,14 +61,14 @@ export default function ServiceCardSchedule({
     const scheduleDetails = {
       date: date.toLocaleDateString("pt-BR"),
       time,
-      services,
+      addedServices,
     };
 
     console.log("Agendamento criado:", scheduleDetails);
 
     setDate(undefined);
     setTime(null);
-    setServices([]);
+    setAddedServices([]);
   };
 
   return (
@@ -130,7 +129,7 @@ export default function ServiceCardSchedule({
           <div className="flex  flex-col ">
             <TitleSection title="Serviços selecionados" />
             <div className="flex flex-wrap gap-2  pb-2 text-sm">
-              {SERVICES_WITHOUT_DESCRIPTION.map((service, index) => (
+              {services.map((service, index) => (
                 <button
                   onClick={() => handleToggleService(service)}
                   key={index}
@@ -138,7 +137,7 @@ export default function ServiceCardSchedule({
                   <Badge
                     className="flex items-center gap-2  px-4 py-2"
                     variant={
-                      services.find((s) => s.title === service.title)
+                      addedServices.find((s) => s.title === service.title)
                         ? "default"
                         : "outline"
                     }
@@ -158,7 +157,7 @@ export default function ServiceCardSchedule({
 
               <div className="space-y-2">
                 <div>
-                  {services.map((service, index) => (
+                  {addedServices.map((service, index) => (
                     <div
                       key={index}
                       className="flex items-center justify-between"
@@ -170,7 +169,7 @@ export default function ServiceCardSchedule({
                     </div>
                   ))}
 
-                  {services.length > 1 && (
+                  {addedServices.length > 1 && (
                     <div>
                       <Separator className="my-2" />
                       <div className="flex items-center justify-between">

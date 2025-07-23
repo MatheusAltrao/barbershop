@@ -1,19 +1,13 @@
+import { ServiceProps } from "@/types/service.types";
 import { formatCentsToReais } from "@/utils/formatCentsToReais";
-import ServiceCardSchedule from "./service-card-schedule";
+import { ReactNode } from "react";
 
 interface ServiceCardProps {
-  service: {
-    title: string;
-    description: string;
-    price: number;
-  };
+  service: ServiceProps;
+  children: ReactNode;
 }
 
-export default function ServiceCard({ service }: ServiceCardProps) {
-  const serviceSelected = {
-    title: service.title,
-    price: service.price,
-  };
+export default function ServiceCard({ service, children }: ServiceCardProps) {
   return (
     <div className="p-3 border rounded-md flex gap-3">
       <div className="min-w-[110px] h-[110px] rounded-md bg-muted-foreground"></div>
@@ -29,7 +23,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             {formatCentsToReais(service.price)}
           </span>
 
-          <ServiceCardSchedule serviceSelected={serviceSelected} />
+          {children}
         </div>
       </div>
     </div>
