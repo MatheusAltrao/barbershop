@@ -1,8 +1,10 @@
 "use client";
+import { createScheduleAction } from "@/actions/schedule/create-schedule.action";
 import TitleSection from "@/components/typography/title-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import Loading from "@/components/ui/loading";
 import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
@@ -18,7 +20,7 @@ import { CURRENT_TIME } from "@/utils/amazones-timezone";
 import { formatCentsToReais } from "@/utils/formatCentsToReais";
 import { ptBR } from "date-fns/locale";
 import { Calendar1Icon, Plus } from "lucide-react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
 interface ServiceCardScheduleProps {
   services: ServiceProps[];
@@ -36,6 +38,7 @@ export default function ServiceCardSchedule({
   const [addedServices, setAddedServices] = useState<ServiceProps[]>([
     selectedService,
   ]);
+  const [isPending, startTransition] = useTransition();
 
   const handleToggleService = (service: ServiceProps) => {
     setAddedServices((prev) => {
@@ -52,23 +55,25 @@ export default function ServiceCardSchedule({
     }, 0);
   };
 
-  const handleCreateSchedule = () => {
-    if (!date || !time || addedServices.length === 0) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
+  const handleCreateSchedule = async () => {
+    startTransition(async () => {
+      if (!date || !time || addedServices.length === 0) {
+        alert("Por favor, preencha todos os campos.");
+        return;
+      }
 
-    const scheduleDetails = {
-      date: date.toLocaleDateString("pt-BR"),
-      time,
-      addedServices,
-    };
+      const scheduleDetails = {
+        date: date.toLocaleDateString("pt-BR"),
+        time,
+        addedServices,
+      };
 
-    console.log("Agendamento criado:", scheduleDetails);
+      await createScheduleAction(scheduleDetails);
 
-    setDate(undefined);
-    setTime(null);
-    setAddedServices([]);
+      setDate(undefined);
+      setTime(null);
+      setAddedServices([]);
+    });
   };
 
   return (
@@ -196,8 +201,12 @@ export default function ServiceCardSchedule({
           <Separator />
 
           <div className="">
-            <Button onClick={handleCreateSchedule} className="w-full ">
-              <Calendar1Icon size={20} /> Agendar
+            <Button
+              onClick={handleCreateSchedule}
+              disabled={isPending}
+              className="w-full "
+            >
+              {isPending ? <Loading /> : <Calendar1Icon size={20} />} Agendar
             </Button>
           </div>
         </div>
