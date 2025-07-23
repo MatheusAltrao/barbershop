@@ -20,14 +20,23 @@ import { ptBR } from "date-fns/locale";
 import { Calendar1Icon, Plus } from "lucide-react";
 import { useState } from "react";
 
-export default function ServiceCardSchedule() {
+interface ServiceCardScheduleProps {
+  serviceSelected: {
+    title: string;
+    price: number;
+  };
+}
+
+export default function ServiceCardSchedule({
+  serviceSelected,
+}: ServiceCardScheduleProps) {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   const [time, setTime] = useState<string | null>(null);
-  const [services, setServices] = useState<{ title: string; price: number }[]>(
-    []
-  );
+  const [services, setServices] = useState<{ title: string; price: number }[]>([
+    serviceSelected,
+  ]);
 
   const handleToggleService = (service: { title: string; price: number }) => {
     setServices((prev) => {

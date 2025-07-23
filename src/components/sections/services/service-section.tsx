@@ -9,12 +9,7 @@ export default function ServiceSection() {
 
       <div className="space-y-2">
         {SERVICES.map((service) => (
-          <ServiceCard
-            key={service.title}
-            title={service.title}
-            description={service.description}
-            price={service.price}
-          />
+          <ServiceCard key={service.title} service={service} />
         ))}
       </div>
     </div>
