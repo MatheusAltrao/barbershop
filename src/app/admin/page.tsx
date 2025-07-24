@@ -1,6 +1,6 @@
 "use server";
 import { getSchedulesAction } from "@/actions/schedule/get-schedules.action";
-import { Button } from "@/components/ui/button";
+
 import StatusBadge from "@/components/ui/status-badge";
 import {
   Table,
@@ -11,14 +11,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ScheduleWithRelations } from "@/types/schedule.types";
-
 import { formatCentsToReais } from "@/utils/formatCentsToReais";
 import { formatDate } from "@/utils/formatDate";
-import { Menu } from "lucide-react";
+import ActionButton from "./components/actions-button";
 
 export default async function AdminPage() {
   const schedules: ScheduleWithRelations[] = await getSchedulesAction();
-
+  const emptySchedules = schedules.length === 0;
   const calculateTotal = (services: ScheduleWithRelations["services"]) => {
     return services.reduce((total, scheduleService) => {
       return total + scheduleService.service.price;
@@ -57,14 +56,18 @@ export default async function AdminPage() {
                 {formatCentsToReais(calculateTotal(schedule.services))}
               </TableCell>
               <TableCell className="text-right">
-                <Button size={"icon"} variant={"outline"}>
-                  <Menu />
-                </Button>
+                <ActionButton scheduleId={schedule.id} />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+
+      {emptySchedules && (
+        <div className="text-center text-muted-foreground py-10">
+          Nenhum agendamento encontrado.
+        </div>
+      )}
     </div>
   );
 }
