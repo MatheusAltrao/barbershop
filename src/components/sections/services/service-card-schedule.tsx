@@ -1,5 +1,6 @@
 "use client";
 import { createScheduleAction } from "@/actions/schedule/create-schedule.action";
+import { toastSuccessAction } from "@/components/toast/toast-action";
 import TitleSection from "@/components/typography/title-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,7 @@ export default function ServiceCardSchedule({
   selectedService,
   services,
 }: ServiceCardScheduleProps) {
+  const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
@@ -69,6 +71,8 @@ export default function ServiceCardSchedule({
       };
 
       await createScheduleAction(scheduleDetails);
+      toastSuccessAction("Agendamento criado com sucesso!");
+      setOpen(false);
 
       setDate(undefined);
       setTime(null);
@@ -77,7 +81,7 @@ export default function ServiceCardSchedule({
   };
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button size={"sm"}>Reservar</Button>
       </SheetTrigger>
