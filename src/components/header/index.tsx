@@ -1,6 +1,7 @@
 "use server";
 import { signInAction } from "@/actions/login/signIn.action";
 import { signOutAction } from "@/actions/login/signOut.action";
+import { requireAdmin } from "@/actions/login/verify-login.action";
 import GoogleIcon from "@/assets/icons/google.svg";
 import {
   Sheet,
@@ -21,8 +22,9 @@ export default async function Header() {
   const session = await auth();
 
   const isLoggedIn = !!session?.user;
+  const isAdmin = await requireAdmin();
 
-  const links = [
+  const USER_LINKS = [
     {
       label: "Início",
       href: "/",
@@ -30,6 +32,17 @@ export default async function Header() {
     },
     { label: "Agendamento", href: "/schedule", icon: <Calendar size={20} /> },
   ];
+
+  const ADMIN_LINKS = [
+    {
+      label: "Início",
+      href: "/",
+      icon: <Home size={20} />,
+    },
+    { label: "Agendamentos", href: "/admin", icon: <Calendar size={20} /> },
+  ];
+
+  const LINKS = isAdmin ? ADMIN_LINKS : USER_LINKS;
 
   return (
     <header className=" p-5 bg-gray-800 ">
@@ -91,7 +104,7 @@ export default async function Header() {
               {isLoggedIn && (
                 <div className="flex flex-col flex-1 justify-between  ">
                   <div className="flex flex-col gap-2">
-                    {links.map((link) => (
+                    {LINKS.map((link) => (
                       <Link className="w-full" key={link.href} href={link.href}>
                         <Button
                           className="w-full justify-start"
