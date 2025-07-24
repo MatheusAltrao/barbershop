@@ -2,7 +2,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import { requireUser } from "../login/verify-login.action";
+import { requireAuth } from "../login/verify-login.action";
 
 const scheduleSchema = z.object({
   addedServices: z
@@ -27,7 +27,7 @@ export async function createScheduleAction(data: IScheduleSchema) {
   try {
     const session = await auth();
 
-    await requireUser();
+    await requireAuth();
 
     const validationResult = scheduleSchema.safeParse(data);
 
