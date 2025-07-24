@@ -10,22 +10,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ScheduleWithRelations } from "@/types/schedule.types";
+
 import { formatCentsToReais } from "@/utils/formatCentsToReais";
 import { formatDate } from "@/utils/formatDate";
 import { Menu } from "lucide-react";
 
 export default async function AdminPage() {
-  const schedules = await getSchedulesAction();
+  const schedules: ScheduleWithRelations[] = await getSchedulesAction();
 
-  // Função para calcular o total do agendamento
-  const calculateTotal = (services: any[]) => {
+  const calculateTotal = (services: ScheduleWithRelations["services"]) => {
     return services.reduce((total, scheduleService) => {
       return total + scheduleService.service.price;
     }, 0);
   };
 
-  // Função para obter nomes dos serviços
-  const getServiceNames = (services: any[]) => {
+  const getServiceNames = (services: ScheduleWithRelations["services"]) => {
     return services
       .map((scheduleService) => scheduleService.service.title)
       .join(", ");

@@ -11,7 +11,6 @@ export async function getSchedulesAction() {
     }
 
     const userRole = session.user?.role;
-    console.log("User role:", userRole);
 
     if (userRole !== "ADMIN") {
       throw new Error(
