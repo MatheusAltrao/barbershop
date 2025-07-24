@@ -2,6 +2,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { requireUser } from "../login/verify-login.action";
 
 const scheduleSchema = z.object({
   addedServices: z
@@ -26,9 +27,7 @@ export async function createScheduleAction(data: IScheduleSchema) {
   try {
     const session = await auth();
 
-    if (!session) {
-      throw new Error("User not authenticated");
-    }
+    await requireUser();
 
     const validationResult = scheduleSchema.safeParse(data);
 
@@ -58,7 +57,7 @@ export async function createScheduleAction(data: IScheduleSchema) {
 
     const schedule = await prisma.schedule.create({
       data: {
-        clientId: session.user?.id!,
+        clientId: session?.user?.id!,
         date: dateTime,
         status: "PENDENTE",
         description: `Agendamento com ${validatedData.addedServices.length} serviço(s)`,

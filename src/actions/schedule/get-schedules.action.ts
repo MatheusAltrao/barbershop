@@ -1,22 +1,10 @@
 "use server";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "../login/verify-login.action";
 
 export async function getSchedulesAction() {
   try {
-    const session = await auth();
-
-    if (!session) {
-      throw new Error("User not authenticated");
-    }
-
-    const userRole = session.user?.role;
-
-    if (userRole !== "ADMIN") {
-      throw new Error(
-        "Access denied: User does not have permission to view schedules"
-      );
-    }
+    await requireAdmin();
 
     const schedules = await prisma.schedule.findMany({
       include: {
