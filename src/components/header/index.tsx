@@ -1,7 +1,6 @@
 "use server";
 import { signInAction } from "@/actions/login/signIn.action";
 import { signOutAction } from "@/actions/login/signOut.action";
-import { requireAdmin } from "@/actions/login/verify-login.action";
 import GoogleIcon from "@/assets/icons/google.svg";
 import {
   Sheet,
@@ -22,7 +21,7 @@ export default async function Header() {
   const session = await auth();
 
   const isLoggedIn = !!session?.user;
-  const isAdmin = await requireAdmin();
+  const isAdmin = session?.user.role === "ADMIN";
 
   const USER_LINKS = [
     {
