@@ -15,13 +15,9 @@ export default function SchedulesCard({
   services,
   date,
 }: SchedulesCardProps) {
-  const getDay = date.getDate();
-  const getMonth = format(date, "MMMM", { locale: ptBR }); // Nome do mês abreviado
-  const time = date.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
+  const getDay = format(date, "dd", { locale: ptBR });
+  const getMonth = format(date, "MMMM", { locale: ptBR });
+  const time = format(date, "HH:mm", { locale: ptBR });
   const badgeStatusColors = {
     confirmado: "bg-green-500",
     pendente: "bg-yellow-500",
