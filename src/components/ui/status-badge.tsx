@@ -5,5 +5,9 @@ interface StatusBadgeProps {
   status: StatusProps;
 }
 export default function StatusBadge({ status }: StatusBadgeProps) {
-  return <Badge variant={status}>{status}</Badge>;
+  return (
+    <Badge className="w-full flex items-center justify-center" variant={status}>
+      {status}
+    </Badge>
+  );
 }

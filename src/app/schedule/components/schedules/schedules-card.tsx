@@ -1,11 +1,12 @@
 import { UserScheduleWithRelations } from "@/actions/schedule/get-user-status-schedule.action";
 import { Badge } from "@/components/ui/badge";
+import { StatusProps } from "@/types/status.types";
 import { formatCentsToReais } from "@/utils/formatCentsToReais";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 interface SchedulesCardProps {
-  status: "confirmado" | "pendente" | "finalizado";
+  status: StatusProps;
   services: UserScheduleWithRelations["services"];
   date: Date;
 }
@@ -19,15 +20,17 @@ export default function SchedulesCard({
   const getMonth = format(date, "MMMM", { locale: ptBR });
   const time = format(date, "HH:mm", { locale: ptBR });
   const badgeStatusColors = {
-    confirmado: "bg-green-500",
-    pendente: "bg-yellow-500",
-    finalizado: "bg-gray-500",
+    CONFIRMADO: "bg-green-500",
+    PENDENTE: "bg-yellow-500",
+    FINALIZADO: "bg-gray-500",
+    CANCELADO: "bg-red-500",
   };
 
   const bgStatusColors = {
-    confirmado: "bg-green-50",
-    pendente: "bg-yellow-50",
-    finalizado: "bg-gray-50",
+    CONFIRMADO: "bg-green-50",
+    PENDENTE: "bg-yellow-50",
+    FINALIZADO: "bg-gray-50",
+    CANCELADO: "bg-red-50",
   };
 
   const getServiceNames = (services: UserScheduleWithRelations["services"]) => {

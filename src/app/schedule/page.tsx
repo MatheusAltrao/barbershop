@@ -21,6 +21,9 @@ export default async function SchedulePage() {
   const finishedSchedules = schedules.filter(
     (schedule) => schedule.status === "FINALIZADO"
   );
+  const cancelledSchedules = schedules.filter(
+    (schedule) => schedule.status === "CANCELADO"
+  );
 
   return (
     <div className="px-5 pt-6 space-y-6">
@@ -41,7 +44,7 @@ export default async function SchedulePage() {
                   <SchedulesCard
                     key={schedule.id}
                     date={schedule.date}
-                    status="confirmado"
+                    status="CONFIRMADO"
                     services={schedule.services}
                   />
                 ))}
@@ -59,7 +62,7 @@ export default async function SchedulePage() {
                 <SchedulesCard
                   key={schedule.id}
                   date={schedule.date}
-                  status="pendente"
+                  status="PENDENTE"
                   services={schedule.services}
                 />
               ))}
@@ -76,7 +79,23 @@ export default async function SchedulePage() {
                 <SchedulesCard
                   key={schedule.id}
                   date={schedule.date}
-                  status="finalizado"
+                  status="FINALIZADO"
+                  services={schedule.services}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {cancelledSchedules.length > 0 && (
+          <div>
+            <TitleSection title="CANCELADOS" />
+
+            <div className="space-y-2">
+              {cancelledSchedules.map((schedule) => (
+                <SchedulesCard
+                  key={schedule.id}
+                  date={schedule.date}
+                  status="CANCELADO"
                   services={schedule.services}
                 />
               ))}

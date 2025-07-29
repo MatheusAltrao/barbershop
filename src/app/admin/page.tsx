@@ -1,7 +1,6 @@
 "use server";
 import { getSchedulesAction } from "@/actions/schedule/get-schedules.action";
 
-import StatusBadge from "@/components/ui/status-badge";
 import {
   Table,
   TableBody,
@@ -14,6 +13,7 @@ import { ScheduleWithRelations } from "@/types/schedule.types";
 import { formatCentsToReais } from "@/utils/formatCentsToReais";
 import { formatDate } from "@/utils/formatDate";
 import ActionButton from "./components/actions-button";
+import SelectStatus from "./components/select-status";
 
 export default async function AdminPage() {
   const schedules: ScheduleWithRelations[] = await getSchedulesAction();
@@ -50,7 +50,7 @@ export default async function AdminPage() {
               <TableCell>{getServiceNames(schedule.services)}</TableCell>
               <TableCell>{formatDate(schedule.date)}</TableCell>
               <TableCell>
-                <StatusBadge status={schedule.status} />
+                <SelectStatus id={schedule.id} status={schedule.status} />
               </TableCell>
               <TableCell>
                 {formatCentsToReais(calculateTotal(schedule.services))}
