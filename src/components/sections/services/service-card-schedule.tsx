@@ -1,4 +1,5 @@
 "use client";
+import { checkScheduleAvailabilityAction } from "@/actions/schedule/check-schedule-availability-of-the-day.action";
 import { createScheduleAction } from "@/actions/schedule/create-schedule.action";
 import { toastSuccessAction } from "@/components/toast/toast-action";
 import TitleSection from "@/components/typography/title-section";
@@ -15,13 +16,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { HOURS } from "@/constants/hours";
 import { ServiceProps } from "@/types/service.types";
 import { CURRENT_TIME } from "@/utils/amazones-timezone";
 import { formatCentsToReais } from "@/utils/formatCentsToReais";
 import { ptBR } from "date-fns/locale";
 import { Calendar1Icon, Plus } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 interface ServiceCardScheduleProps {
   services: ServiceProps[];
@@ -40,7 +40,9 @@ export default function ServiceCardSchedule({
   const [addedServices, setAddedServices] = useState<ServiceProps[]>([
     selectedService,
   ]);
+  const [availableTimes, setAvailableTimes] = useState<string[]>([]);
   const [isPending, startTransition] = useTransition();
+  const [isLoadingTimes, setIsLoadingTimes] = useState(false);
 
   const handleToggleService = (service: ServiceProps) => {
     setAddedServices((prev) => {
@@ -80,6 +82,49 @@ export default function ServiceCardSchedule({
     });
   };
 
+  useEffect(() => {
+    if (!date) {
+      setAvailableTimes([]);
+      return;
+    }
+
+    const checkAvailability = async () => {
+      setIsLoadingTimes(true);
+      try {
+        const times = await checkScheduleAvailabilityAction(date);
+
+        // Filtrar horários passados se for hoje
+        const now = new Date();
+        const isToday = date.toDateString() === now.toDateString();
+
+        const filteredTimes = isToday
+          ? times.filter((hour) => {
+              const [hourPart, minutePart] = hour.split(":").map(Number);
+              const scheduleTime = new Date(date);
+              scheduleTime.setHours(hourPart, minutePart, 0, 0);
+              return scheduleTime > now;
+            })
+          : times;
+
+        setAvailableTimes(filteredTimes);
+
+        // Reset time se não estiver mais disponível
+        if (time && !filteredTimes.includes(time)) {
+          setTime(null);
+        }
+      } catch (error) {
+        console.error("Erro ao verificar disponibilidade:", error);
+        setAvailableTimes([]);
+      } finally {
+        setIsLoadingTimes(false);
+      }
+    };
+
+    checkAvailability();
+  }, [date, time]);
+
+  const noScheduleAvailable = availableTimes.length === 0 && !isLoadingTimes;
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -115,7 +160,7 @@ export default function ServiceCardSchedule({
             <TitleSection title="Selecione o horário" />
             <div className="space-y-2">
               <div className="flex items-center gap-2  pb-2 overflow-x-auto ">
-                {HOURS.map((hour) => (
+                {availableTimes.map((hour) => (
                   <button key={hour} onClick={() => setTime(hour)}>
                     <Badge
                       className=" px-4 py-2"
@@ -125,6 +170,13 @@ export default function ServiceCardSchedule({
                     </Badge>
                   </button>
                 ))}
+
+                {noScheduleAvailable && (
+                  <span className="text-red-500 text-sm">
+                    Não há horários disponíveis para esta data. <br /> tente
+                    outro dia
+                  </span>
+                )}
               </div>
 
               <span className="text-xs ">
