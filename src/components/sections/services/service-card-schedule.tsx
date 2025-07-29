@@ -78,7 +78,6 @@ export default function ServiceCardSchedule({
 
       setDate(undefined);
       setTime(null);
-      setAddedServices([]);
     });
   };
 
@@ -93,7 +92,6 @@ export default function ServiceCardSchedule({
       try {
         const times = await checkScheduleAvailabilityAction(date);
 
-        // Filtrar horários passados se for hoje
         const now = new Date();
         const isToday = date.toDateString() === now.toDateString();
 
@@ -108,7 +106,6 @@ export default function ServiceCardSchedule({
 
         setAvailableTimes(filteredTimes);
 
-        // Reset time se não estiver mais disponível
         if (time && !filteredTimes.includes(time)) {
           setTime(null);
         }
